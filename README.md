@@ -1,6 +1,5 @@
 algorithm_with_dots-matrices
 ============================
-
 Algorithm solves the problem of the points placement according to the length which is specified in the matrix.
 
 __Example__:
@@ -39,7 +38,7 @@ The following matrix has been specified:
 </tr>
 </table>
 
-_Note_: Matrix must be symmetric square matrix.
+_Note_: Matrix must be symmetric and square one.
         We skip the first row and col which are always must be:
 <br>[ 0, 1, 2 .. ( len(row {or col because matrix is square}) - 1 ) ]:<br>
 According to the matrix we can say the distance between two dots.<br> Thus, the distances: <br>

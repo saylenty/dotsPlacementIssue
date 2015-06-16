@@ -6,17 +6,27 @@ __author__ = 'Saylenty'
 import time
 # Enter your matrix here
 
-"""matrix = ((0, 4, 3, 4, 3, 3, 6, 3, 4, 2),
-          (4, 0, 3, 4, 7, 7, 6, 5, 4, 2),
-          (3, 3, 0, 3, 6, 6, 9, 6, 7, 5),
-          (4, 4, 3, 0, 3, 5, 10, 7, 8, 6),
-          (3, 7, 6, 3, 0, 4, 9, 6, 7, 5),
-          (3, 7, 6, 5, 4, 0, 5, 2, 7, 5),
-          (6, 6, 9, 10, 9, 5, 0, 3, 4, 4),
-          (3, 5, 6, 7, 6, 2, 3, 0, 5, 3),
-          (4, 4, 7, 8, 7, 7, 4, 5, 0, 2),
-          (2, 2, 5, 6, 5, 5, 4, 3, 2, 0))
-"""
+# matrix = ((0, 4, 3, 4, 3, 3, 6, 3, 4, 2),
+#          (4, 0, 3, 4, 7, 7, 6, 5, 4, 2),
+#          (3, 3, 0, 3, 6, 6, 9, 6, 7, 5),
+#          (4, 4, 3, 0, 3, 5, 10, 7, 8, 6),
+#          (3, 7, 6, 3, 0, 4, 9, 6, 7, 5),
+#          (3, 7, 6, 5, 4, 0, 5, 2, 7, 5),
+#          (6, 6, 9, 10, 9, 5, 0, 3, 4, 4),
+#          (3, 5, 6, 7, 6, 2, 3, 0, 5, 3),
+#          (4, 4, 7, 8, 7, 7, 4, 5, 0, 2),
+#          (2, 2, 5, 6, 5, 5, 4, 3, 2, 0))
+
+# matrix = ((0, 1, 1, 2, 3, 1, 2, 4, 3),
+#          (1, 0, 2, 3, 4, 2, 3, 5, 4),
+#          (1, 2, 0, 1, 2, 2, 3, 5, 4),
+#          (2, 3, 1, 0, 1, 3, 4, 6, 5),
+#          (3, 4, 2, 1, 0, 4, 5, 7, 6),
+#          (1, 2, 2, 3, 4, 0, 1, 3, 2),
+#          (2, 3, 3, 4, 5, 1, 0, 2, 1),
+#          (4, 5, 5, 6, 7, 3, 2, 0, 1),
+#          (3, 4, 4, 5, 6, 2, 1, 1, 0))
+
 matrix = ((0, 2, 2, 4, 4, 6, 6, 8, 8, 8),
           (2, 0, 4, 2, 6, 4, 8, 6, 10, 8),
           (2, 4, 0, 6, 2, 8, 4, 10, 6, 8),
@@ -28,25 +38,14 @@ matrix = ((0, 2, 2, 4, 4, 6, 6, 8, 8, 8),
           (8, 10, 6, 12, 4, 14, 2, 16, 0, 8),
           (8, 8, 8, 8, 8, 8, 8, 8, 8, 0))
 
-"""matrix = ((0, 1, 1, 2, 3, 1, 2, 4, 3),
-          (1, 0, 2, 3, 4, 2, 3, 5, 4),
-          (1, 2, 0, 1, 2, 2, 3, 5, 4),
-          (2, 3, 1, 0, 1, 3, 4, 6, 5),
-          (3, 4, 2, 1, 0, 4, 5, 7, 6),
-          (1, 2, 2, 3, 4, 0, 1, 3, 2),
-          (2, 3, 3, 4, 5, 1, 0, 2, 1),
-          (4, 5, 5, 6, 7, 3, 2, 0, 1),
-          (3, 4, 4, 5, 6, 2, 1, 1, 0))
-"""
-
-lt = [set() for k in range(10)]
+lt = [set() for k in range(len(matrix))]  # create cache which reduces calculation number => speed up execution
 
 
 def check_distance(dot_number, coord, lst):
-    """ Функция проверки дистанции между точками
-        dot_number - номер точки [0 - 9]
-        coord - текущая пара (x, y) координат для точки dot_number
-        lst - список координат предыдущих точек по порядку
+    """ Function which checks the distance between dots
+        dot_number - number of the dot 
+        coord - current coordinates pair (x, y) for current dot dot_number
+        lst - list of previous dots (ordered)
     """
     for i in reversed(range(dot_number)[1:]):
         if matrix[dot_number][i] != abs(coord[0] - lst[i][0]) + abs(coord[1] - lst[i][1]): return False
@@ -54,38 +53,42 @@ def check_distance(dot_number, coord, lst):
 
 
 def gen_cord(dot_number):
-    """ dot_number - номер точки """
+    """ Function which generates possible coordinates for current dot
+        dot_number - number of the dot 
+    """
     global lt
-    if len(lt[dot_number]) > 0:  # Если просчитали уже координаты точки
-        yield from lt[dot_number]  # Зависаем тут
-        return  # Не идем пересчитывать уже имеющиеся координаты
+    if len(lt[dot_number]) > 0:  # if we already have coord-s for current dot in cache
+        yield from lt[dot_number]
+        return  # we don't need to recalculate them again -> return
     i = (matrix[0][dot_number])
     s = set()
     for j in range(i + 1):
         s.update(((j, i - j), (j, -(i - j)), (-j, -(i - j)), (-j, i - j)))
-        if len(s) > i * 2:  # Для ускорения работы. Нет смысла считать все, считаем партиями
-            yield from s  # Все равно что for p in s: yield p
+        if len(s) > i * 2:  # to speed up the calculation we compute partially
+            yield from s  # The same as "for p in s: yield p"
             lt[dot_number] = lt[dot_number].union(s)
             s.clear()
-    if len(s) > 0:  # Остатки
+    if len(s) > 0:  # remains
         yield from s
         lt[dot_number] = lt[dot_number].union(s)
 
 
 def main_func(lst, i=1):
-    """ lst - результирующий спосок координат всех точек """
-    for d in gen_cord(i):  # Взяли следующую координату текущей точки
-        if check_distance(i, d, lst):  # Проверяем подходит ли она
-            lst.append(d)  # Если подходит => добавляем в список
-            if i == len(matrix) - 1: return True  # Если только что добавили 9-ую точку, выходим с успехом
+    """ lst - contains the resulting list of all dots """
+    for d in gen_cord(i):  # Take next coord of the current dot
+        if check_distance(i, d, lst):  # Check if it satisfies the condition
+            lst.append(d)  # If yes -> add to list
+            if i == len(matrix) - 1: return True  # if we just added the last (9-th) dot -> return successfully
             if not main_func(lst, i + 1):
-                lst.pop()  # Если невозможно поставить следующую точку - убираем текущую
+                lst.pop()  # if it is impossible to put the next dot -> remove the current one
             else:
-                return True  # Подобрали 9 точку, выходим из рекурсии
-    return False  # Все координаты точки перебраны и ни одна из точек не подошла => возвращаемся на одну точку
+                return True  # find the last (9-th) dot -> stop recursion
+    return False  # if we have iterated over all coord-s of the current dot
+    # and haven't found the right coord -> step back
 
 
-def wr():  # Функция где просто создается список с начальной точкой и вызывается основная функция (main_func)
+def wr():
+    """ Function where we create initial list and call the main function (main_func) """
     lst = [(0, 0)]
     main_func(lst)
     return lst
