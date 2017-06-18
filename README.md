@@ -1,4 +1,4 @@
-algorithm_with_dots-matrices
+dotsPlacementIssue
 ============================
 Algorithm solves the problem of the points placement according to the length which is specified in the matrix.
 
