@@ -15,17 +15,18 @@ import static java.lang.Math.abs;
 
 public class PositionFinderTask extends RecursiveTask<List<List<Point>>> {
 
-    private int[][] matrix;
-    private ICoordinatesGenerator generator;
-    private int pointNumber;
-    private List<Point> localResult;
-    private List<List<Point>> result = new ArrayList<>();
+    private final int[][] matrix;
+    private final ICoordinatesGenerator generator;
+    private final int pointNumber;
+    private final List<Point> localResult;
+    private final List<List<Point>> result;
 
     public PositionFinderTask(int[][] matrix, ICoordinatesGenerator generator) {
         this.matrix = matrix;
         this.generator = generator;
         this.pointNumber = 0;
         this.localResult = new ArrayList<>();
+        this.result = new ArrayList<>();
     }
 
     private PositionFinderTask(int[][] matrix, int pointNumber, ICoordinatesGenerator generator,
@@ -57,7 +58,9 @@ public class PositionFinderTask extends RecursiveTask<List<List<Point>>> {
                 // if it's the last point
                 if (pointNumber == matrix.length - 1) {
                     // we found the solution, add it to the final solution list
-                    result.add(localResultCopy);
+                    synchronized (result){
+                        result.add(localResultCopy);
+                    }
                     return result;
                 }
                 // run next dot calculation
