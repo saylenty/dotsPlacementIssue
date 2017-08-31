@@ -1,8 +1,8 @@
 package com.gitlab.saylenty.visual;
 
-import com.gitlab.saylenty.Generator.PointPositionGenerator;
-import com.gitlab.saylenty.Infrastructure.Point;
-import com.gitlab.saylenty.Task.PositionFinderCountedCompleter;
+import com.gitlab.saylenty.generator.PointPositionGenerator;
+import com.gitlab.saylenty.infrastructure.Point;
+import com.gitlab.saylenty.task.PositionFinderCountedCompleter;
 import javafx.fxml.FXML;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;

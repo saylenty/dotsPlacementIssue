@@ -1,6 +1,6 @@
-package com.gitlab.saylenty.Generator;
+package com.gitlab.saylenty.generator;
 
-import com.gitlab.saylenty.Infrastructure.Point;
+import com.gitlab.saylenty.infrastructure.Point;
 
 import java.util.Iterator;
 

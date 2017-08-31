@@ -1,7 +1,7 @@
 package com.gitlab.saylenty;
 
-import com.gitlab.saylenty.Generator.PointPositionGenerator;
-import com.gitlab.saylenty.Task.PositionFinderTask;
+import com.gitlab.saylenty.generator.PointPositionGenerator;
+import com.gitlab.saylenty.task.PositionFinderTask;
 
 import java.util.concurrent.ExecutionException;
 

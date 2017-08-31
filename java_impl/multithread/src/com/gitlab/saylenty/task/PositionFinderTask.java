@@ -1,7 +1,7 @@
-package com.gitlab.saylenty.Task;
+package com.gitlab.saylenty.task;
 
-import com.gitlab.saylenty.Generator.ICoordinatesGenerator;
-import com.gitlab.saylenty.Infrastructure.Point;
+import com.gitlab.saylenty.generator.ICoordinatesGenerator;
+import com.gitlab.saylenty.infrastructure.Point;
 
 import java.util.ArrayList;
 import java.util.Iterator;
