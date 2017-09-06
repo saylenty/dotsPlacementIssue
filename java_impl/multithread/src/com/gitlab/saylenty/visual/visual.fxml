@@ -16,10 +16,10 @@
         <ScatterChart id="ScatterChart" fx:id="ScatterChart" minHeight="-Infinity" minWidth="-Infinity" cache="true"
                       cacheHint="SPEED" title="Solution visual representation" VBox.vgrow="SOMETIMES">
             <xAxis>
-                <NumberAxis side="BOTTOM" fx:id="xAxis" label="X axis"/>
+                <NumberAxis side="BOTTOM" fx:id="xAxis" label="X axis" autoRanging="false"/>
             </xAxis>
             <yAxis>
-                <NumberAxis side="LEFT" fx:id="yAxis" label="Y axis"/>
+                <NumberAxis side="LEFT" fx:id="yAxis" label="Y axis" autoRanging="false"/>
             </yAxis>
         </ScatterChart>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">

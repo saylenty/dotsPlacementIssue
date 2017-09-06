@@ -11,7 +11,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class UIMainController {
 
@@ -54,23 +53,65 @@ public class UIMainController {
             // run task and wait until complete
             result = positionFinderTask.invoke();
         }
-        ScatterChart.getData().clear();
         if (currentSolution < result.size()) {
+            ScatterChart.getData().clear(); // clear the current chart
+            // we need to find the chart min-max bounds
+            int minX = Integer.MAX_VALUE;
+            int maxX = Integer.MIN_VALUE;
+            int minY = Integer.MAX_VALUE;
+            int maxY = Integer.MIN_VALUE;
+
             List<Point> points = result.get(currentSolution);
             XYChart.Series<Number, Number> series = new XYChart.Series<>();
             series.setName(String.format("Points visual representation %d", currentSolution + 1));
-            IntStream.range(0, points.size()).forEach(i -> {
+            int bound = points.size();
+            for (int i = 0; i < bound; i++) {
                 Point point = points.get(i);
+                if (point.getX() < minX){
+                    minX = point.getX();
+                }
+                if (point.getX() > maxX){
+                    maxX = point.getX();
+                }
+                if (point.getY() < minY){
+                    minY = point.getY();
+                }
+                if (point.getY() > maxY){
+                    maxY = point.getY();
+                }
                 XYChart.Data<Number, Number> data = new XYChart.Data<>(point.getX(), point.getY());
                 data.setNode(new LabeledChartNode(i));
                 series.getData().add(data);
-            });
+            }
             ScatterChart.getData().add(series);
             currentSolution++;
+            // update new bounds for a chart
+            updateChartScales(minX, maxX, minY, maxY, 1, 1);
+            // make the solutions be cyclic
+            if (currentSolution == result.size()) {
+                currentSolution = 0;
+            }
+        } else{
+            // TODO No solution found
         }
-        // make the solutions be cyclic
-        if (currentSolution == result.size()) {
-            currentSolution = 0;
-        }
+    }
+
+    /**
+     * Applies specified bounds for a chart
+     * @param minX minimal xAxis value
+     * @param maxX maximal xAxis value
+     * @param minY minimal yAxis value
+     * @param maxY maximal xAxis value
+     * @param margin upper-bottom margin
+     * @param tickUnit tick for xAxis and yAxis
+     */
+    private void updateChartScales(int minX, int maxX, int minY, int maxY, int margin, int tickUnit){
+        xAxis.setAutoRanging(false);
+        xAxis.setLowerBound(minX - margin);
+        xAxis.setUpperBound(maxX + margin);
+        xAxis.setTickUnit(tickUnit);
+        yAxis.setLowerBound(minY - margin);
+        yAxis.setUpperBound(maxY + margin);
+        yAxis.setTickUnit(tickUnit);
     }
 }
