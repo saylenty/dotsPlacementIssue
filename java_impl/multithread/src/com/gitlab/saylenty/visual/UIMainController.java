@@ -3,6 +3,7 @@ package com.gitlab.saylenty.visual;
 import com.gitlab.saylenty.generator.PointPositionGenerator;
 import com.gitlab.saylenty.infrastructure.Point;
 import com.gitlab.saylenty.task.PositionFinderCountedCompleter;
+import com.gitlab.saylenty.visual.elements.LabeledChartNode;
 import javafx.fxml.FXML;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
@@ -10,6 +11,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class UIMainController {
 
@@ -57,9 +59,12 @@ public class UIMainController {
             List<Point> points = result.get(currentSolution);
             XYChart.Series<Number, Number> series = new XYChart.Series<>();
             series.setName(String.format("Points visual representation %d", currentSolution + 1));
-            for (Point point : points) {
-                series.getData().add(new XYChart.Data<>(point.getX(), point.getY()));
-            }
+            IntStream.range(0, points.size()).forEach(i -> {
+                Point point = points.get(i);
+                XYChart.Data<Number, Number> data = new XYChart.Data<>(point.getX(), point.getY());
+                data.setNode(new LabeledChartNode(i));
+                series.getData().add(data);
+            });
             ScatterChart.getData().add(series);
             currentSolution++;
         }
