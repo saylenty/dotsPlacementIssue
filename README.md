@@ -13,7 +13,7 @@ Available solvers
     <li>Python implementation - finds the first possible solution</li>
     <li>Java Cuncurrent Aproach
         <ul>
-            <li>Based on ForkJoin task - use cuncurrent technique for solvind the task</li>
+            <li>Based on ForkJoin task - use concurrent technique for solving the task</li>
             <li>Based on CunterCompleted task - similar to ForkJoin but with minimal interprocess communication</li>
         </ul>
     </li>
