@@ -2,7 +2,31 @@ dotsPlacementIssue
 ============================
 Algorithm solves the problem of the points placement according to the length which is specified in the matrix.
 
-__Example__:
+Implantation details
+============================
+The main idea of this algorithm is to try every possible combination of calculated coordinates until the correct answer(s) is found.
+This is a recursive algorithm with backtracking approach.
+
+Available solvers
+============================
+<ol type="1">
+    <li>Python implementation - finds the first possible solution</li>
+    <li>Java Cuncurrent Aproach
+        <ul>
+            <li>Based on ForkJoin task - use cuncurrent technique for solvind the task</li>
+            <li>Based on CunterCompleted task - similar to ForkJoin but with minimal interprocess communication</li>
+        </ul>
+    </li>
+</ol>
+
+Available visualization
+============================
+<ul>
+    <li>Java implementation has a JavaFX2 visualization</li>
+</ul>
+
+Example
+============================
 The following matrix has been specified:
 <br><br>
 <table layout="fixed">
@@ -38,21 +62,22 @@ The following matrix has been specified:
 </tr>
 </table>
 
-_Note_: Matrix must be symmetric and square one.
-        We skip the first row and col which are always must be:
-<br>[ 0, 1, 2 .. ( len(row {or col because matrix is square}) - 1 ) ]:<br>
+_Note_: Matrix must be <b>symmetric and square</b> one.<br>
+        We skip the first row and col which are in range [0; <rows_length or cols_length>) <br>
 According to the matrix we can say the distance between two dots.<br> Thus, the distances: <br>
 <ul>
-    <li> 0->0 = 0 (which is obvious)</li>
-    <li> 0->1 = 2
-    <li> 0->2 = 2<br>
-    ...
+    <li> From point [0] to point [0] = 0 (distance to itself is zero -> obvious)</li>
+    <li> From point [0] to point [1] = 2 </li>
+    <li> Frm point [0] to point [2] = 2 
+    <br>...
     <li> 0->9 = 8 </li>
-    ...
+    <li> 1->0 = 2 </li>
+    <li> 1->1 = 0 (distance to itself is zero -> obvious)
+    <br>...
 </ul>
 
 The initial dot 0 always has coordinates (0, 0).<br>
-After running the script the results are following:
+After running the program one of the results is:
 <br>[(0, 0), (-1, 1), (1, -1), (-2, 2), (2, -2), (-3, 3), (3, -3), (-3, 5), (5, -3), (4, 4)]<br>
 If we visualise the result using Cartesian coordinate system we will get the picture:<br>
 <br> ![result](./ex.jpg) <br>
