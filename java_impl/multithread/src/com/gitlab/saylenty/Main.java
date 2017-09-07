@@ -1,9 +1,11 @@
 package com.gitlab.saylenty;
 
 import com.gitlab.saylenty.generator.PointPositionGenerator;
+import com.gitlab.saylenty.infrastructure.Point;
+import com.gitlab.saylenty.strategy.PointsFinderStrategy;
 import com.gitlab.saylenty.task.PositionFinderTask;
 
-import java.util.concurrent.ExecutionException;
+import java.util.List;
 
 public class Main {
 
@@ -21,14 +23,10 @@ public class Main {
                 {2, 2, 5, 6, 5, 5, 4, 3, 2, 0}
         };
         // create task
-        PositionFinderTask positionFinderTask = new PositionFinderTask(matrix, new PointPositionGenerator());
+        PointsFinderStrategy positionFinderTask = new PositionFinderTask(matrix, new PointPositionGenerator());
         // run task and wait until complete
-        positionFinderTask.invoke();
-        try {
-            // print calculation result
-            positionFinderTask.get().forEach(System.out::println);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+        List<List<Point>> result = positionFinderTask.findSolution(matrix);
+        // print calculation result
+        result.forEach(System.out::println);
     }
 }

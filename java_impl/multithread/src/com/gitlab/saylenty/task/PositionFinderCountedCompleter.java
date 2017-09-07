@@ -2,6 +2,8 @@ package com.gitlab.saylenty.task;
 
 import com.gitlab.saylenty.generator.ICoordinatesGenerator;
 import com.gitlab.saylenty.infrastructure.Point;
+import com.gitlab.saylenty.strategy.PointsFinderStrategy;
+import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,15 +14,15 @@ import java.util.stream.IntStream;
 
 import static java.lang.Math.abs;
 
-public class PositionFinderCountedCompleter extends CountedCompleter<List<List<Point>>> {
+public class PositionFinderCountedCompleter extends CountedCompleter<List<List<Point>>> implements PointsFinderStrategy {
 
-    private final int[][] matrix;
+    private int[][] matrix;
     private final ICoordinatesGenerator generator;
     private final int pointNumber;
     private final List<Point> localResult;
     private final AtomicReference<List<List<Point>>> result;
 
-    public PositionFinderCountedCompleter(int[][] matrix, ICoordinatesGenerator generator) {
+    public PositionFinderCountedCompleter(@NotNull int[][] matrix, @NotNull ICoordinatesGenerator generator) {
         this.matrix = matrix;
         this.generator = generator;
         this.pointNumber = 0;
@@ -81,5 +83,11 @@ public class PositionFinderCountedCompleter extends CountedCompleter<List<List<P
     @Override
     public List<List<Point>> getRawResult() {
         return result.get();
+    }
+
+    @Override
+    public List<List<Point>> findSolution(@NotNull int[][] matrix) {
+        this.matrix = matrix;
+        return this.invoke();
     }
 }

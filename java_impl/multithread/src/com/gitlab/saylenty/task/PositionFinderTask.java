@@ -2,26 +2,29 @@ package com.gitlab.saylenty.task;
 
 import com.gitlab.saylenty.generator.ICoordinatesGenerator;
 import com.gitlab.saylenty.infrastructure.Point;
+import com.gitlab.saylenty.strategy.PointsFinderStrategy;
+import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
 import java.util.stream.IntStream;
 
 import static java.lang.Math.abs;
 
-public class PositionFinderTask extends RecursiveTask<List<List<Point>>> {
+public class PositionFinderTask extends RecursiveTask<List<List<Point>>> implements PointsFinderStrategy {
 
-    private final int[][] matrix;
+    private int[][] matrix;
     private final ICoordinatesGenerator generator;
     private final int pointNumber;
     private final List<Point> localResult;
     private final List<List<Point>> result;
 
-    public PositionFinderTask(int[][] matrix, ICoordinatesGenerator generator) {
+    public PositionFinderTask(@NotNull int[][] matrix, @NotNull ICoordinatesGenerator generator) {
         this.matrix = matrix;
         this.generator = generator;
         this.pointNumber = 0;
@@ -71,6 +74,20 @@ public class PositionFinderTask extends RecursiveTask<List<List<Point>>> {
             }
         }
         subTasks.forEach(ForkJoinTask::join);
+        return result;
+    }
+
+    @Override
+    public List<List<Point>> findSolution(@NotNull int[][] matrix) {
+        this.matrix = matrix;
+        // run task and wait until complete
+        this.invoke();
+        List<List<Point>> result = null;
+        try {
+            result = this.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 }

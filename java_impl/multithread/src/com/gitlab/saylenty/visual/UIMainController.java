@@ -2,13 +2,17 @@ package com.gitlab.saylenty.visual;
 
 import com.gitlab.saylenty.generator.PointPositionGenerator;
 import com.gitlab.saylenty.infrastructure.Point;
+import com.gitlab.saylenty.strategy.PointsFinderStrategy;
 import com.gitlab.saylenty.task.PositionFinderCountedCompleter;
+import com.gitlab.saylenty.task.PositionFinderTask;
 import com.gitlab.saylenty.visual.elements.LabeledChartNode;
 import javafx.fxml.FXML;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 
 import java.util.List;
 
@@ -28,8 +32,13 @@ public class UIMainController {
             {2, 2, 5, 6, 5, 5, 4, 3, 2, 0}
     };
 
+    public RadioButton CountedCompleter;
+    public RadioButton ForkJoinTask;
+    public TextArea InfoLog;
+
     private List<List<Point>> result;
     private int currentSolution;
+    private PointsFinderStrategy currentStrategy;
 
     @FXML
     public ScatterChart<Number, Number> ScatterChart;
@@ -39,19 +48,22 @@ public class UIMainController {
     public NumberAxis xAxis;
     @FXML
     public NumberAxis yAxis;
+
     @FXML
-    private void initialize(){
+    private void initialize() {
+        OnCountedCompleterSelected();
         OnGetNextSolution();
     }
 
+    @FXML
     public void OnGetNextSolution() {
-        if (result == null){
+        if (result == null) {
             // TODO add ability to choose strategy from UI
-            // create task
-            PositionFinderCountedCompleter positionFinderTask = new PositionFinderCountedCompleter(matrix,
-                    new PointPositionGenerator());
             // run task and wait until complete
-            result = positionFinderTask.invoke();
+            long startTime = System.currentTimeMillis();
+            result = currentStrategy.findSolution(matrix);
+            long endTime = System.currentTimeMillis();
+            InfoLog.appendText(String.format("Completed in %d ms\n", endTime - startTime));
         }
         if (currentSolution < result.size()) {
             ScatterChart.getData().clear(); // clear the current chart
@@ -67,16 +79,16 @@ public class UIMainController {
             int bound = points.size();
             for (int i = 0; i < bound; i++) {
                 Point point = points.get(i);
-                if (point.getX() < minX){
+                if (point.getX() < minX) {
                     minX = point.getX();
                 }
-                if (point.getX() > maxX){
+                if (point.getX() > maxX) {
                     maxX = point.getX();
                 }
-                if (point.getY() < minY){
+                if (point.getY() < minY) {
                     minY = point.getY();
                 }
-                if (point.getY() > maxY){
+                if (point.getY() > maxY) {
                     maxY = point.getY();
                 }
                 XYChart.Data<Number, Number> data = new XYChart.Data<>(point.getX(), point.getY());
@@ -91,21 +103,42 @@ public class UIMainController {
             if (currentSolution == result.size()) {
                 currentSolution = 0;
             }
-        } else{
+        } else {
             // TODO No solution found
         }
     }
 
+    @FXML
+    public void OnCountedCompleterSelected() {
+        InfoLog.appendText("Use CountedCompleter algorithm\n");
+        currentStrategy = new PositionFinderCountedCompleter(matrix, new PointPositionGenerator());
+        resetResults();
+    }
+
+    @FXML
+    public void OnForkJoinTaskSelected() {
+        InfoLog.appendText("Use ForkJoinTask algorithm\n");
+        currentStrategy = new PositionFinderTask(matrix, new PointPositionGenerator());
+        resetResults();
+    }
+
+    private void resetResults() {
+        result = null;
+        currentSolution = 0;
+        ScatterChart.getData().clear();
+    }
+
     /**
      * Applies specified bounds for a chart
-     * @param minX minimal xAxis value
-     * @param maxX maximal xAxis value
-     * @param minY minimal yAxis value
-     * @param maxY maximal xAxis value
-     * @param margin upper-bottom margin
+     *
+     * @param minX     minimal xAxis value
+     * @param maxX     maximal xAxis value
+     * @param minY     minimal yAxis value
+     * @param maxY     maximal xAxis value
+     * @param margin   upper-bottom margin
      * @param tickUnit tick for xAxis and yAxis
      */
-    private void updateChartScales(int minX, int maxX, int minY, int maxY, int margin, int tickUnit){
+    private void updateChartScales(int minX, int maxX, int minY, int maxY, int margin, int tickUnit) {
         xAxis.setAutoRanging(false);
         xAxis.setLowerBound(minX - margin);
         xAxis.setUpperBound(maxX + margin);

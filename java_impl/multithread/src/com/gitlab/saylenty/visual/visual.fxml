@@ -3,7 +3,15 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.ScatterChart?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
 <GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.141"
           xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gitlab.saylenty.visual.UIMainController">
     <columnConstraints>
@@ -13,17 +21,30 @@
         <RowConstraints/>
     </rowConstraints>
     <VBox prefHeight="200.0" prefWidth="100.0" GridPane.hgrow="SOMETIMES" GridPane.vgrow="SOMETIMES">
-        <ScatterChart id="ScatterChart" fx:id="ScatterChart" minHeight="-Infinity" minWidth="-Infinity" cache="true"
-                      cacheHint="SPEED" title="Solution visual representation" VBox.vgrow="SOMETIMES">
+        <ScatterChart id="ScatterChart" fx:id="ScatterChart" cache="true" cacheHint="SPEED" minHeight="-Infinity"
+                      minWidth="-Infinity" title="Solution visual representation" VBox.vgrow="SOMETIMES">
             <xAxis>
-                <NumberAxis side="BOTTOM" fx:id="xAxis" label="X axis" autoRanging="false"/>
+                <NumberAxis autoRanging="false" label="X axis" side="BOTTOM" fx:id="xAxis"/>
             </xAxis>
             <yAxis>
-                <NumberAxis side="LEFT" fx:id="yAxis" label="Y axis" autoRanging="false"/>
+                <NumberAxis fx:id="yAxis" autoRanging="false" label="Y axis" side="LEFT"/>
             </yAxis>
         </ScatterChart>
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
-            <Button fx:id="Next" mnemonicParsing="false" onAction="#OnGetNextSolution" text="Next Solution"/>
-        </HBox>
+        <VBox VBox.vgrow="SOMETIMES">
+            <VBox alignment="CENTER" VBox.vgrow="SOMETIMES">
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <RadioButton fx:id="CountedCompleter" mnemonicParsing="false" onAction="#OnCountedCompleterSelected"
+                                 text="CountedCompleter" selected="true">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="Algorithm"/>
+                        </toggleGroup>
+                    </RadioButton>
+                    <RadioButton fx:id="ForkJoinTask" mnemonicParsing="false" onAction="#OnForkJoinTaskSelected"
+                                 text="ForkJoinTask" toggleGroup="$Algorithm"/>
+                </HBox>
+                <Button fx:id="Next" mnemonicParsing="false" onAction="#OnGetNextSolution" text="Next Solution"/>
+            </VBox>
+            <TextArea fx:id="InfoLog" wrapText="true"/>
+        </VBox>
     </VBox>
 </GridPane>
