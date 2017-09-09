@@ -21,9 +21,8 @@ Available solvers
 
 Available visualization
 ============================
-<ul>
-    <li>Java implementation has a JavaFX2 visualization</li>
-</ul>
+Java implementation has a JavaFX2 visualization:
+<br>![JavaFX2 visualization](https://i.imgur.com/54t6Zax.gif)<br>
 
 Example
 ============================
