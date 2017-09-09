@@ -1,10 +1,10 @@
-package com.gitlab.saylenty.visual;
+package com.gitlab.saylenty.visual.controllers;
 
 import com.gitlab.saylenty.generator.PointPositionGenerator;
 import com.gitlab.saylenty.infrastructure.Point;
 import com.gitlab.saylenty.strategy.PointsFinderStrategy;
-import com.gitlab.saylenty.task.PositionFinderCountedCompleter;
-import com.gitlab.saylenty.task.PositionFinderTask;
+import com.gitlab.saylenty.strategy.concurrent.task.PositionFinderCountedCompleter;
+import com.gitlab.saylenty.strategy.concurrent.task.PositionFinderTask;
 import com.gitlab.saylenty.visual.elements.LabeledChartNode;
 import javafx.fxml.FXML;
 import javafx.scene.chart.NumberAxis;

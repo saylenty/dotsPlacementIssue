@@ -1,4 +1,4 @@
-package com.gitlab.saylenty.task;
+package com.gitlab.saylenty.strategy.concurrent.task;
 
 import com.gitlab.saylenty.generator.ICoordinatesGenerator;
 import com.gitlab.saylenty.infrastructure.Point;
