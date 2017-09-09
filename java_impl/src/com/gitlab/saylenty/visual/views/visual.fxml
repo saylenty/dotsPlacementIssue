@@ -33,12 +33,14 @@
         <VBox VBox.vgrow="SOMETIMES">
             <VBox alignment="CENTER" VBox.vgrow="SOMETIMES">
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                    <RadioButton fx:id="CountedCompleter" mnemonicParsing="false" onAction="#OnCountedCompleterSelected"
-                                 text="CountedCompleter" selected="true">
+                    <RadioButton fx:id="SimpleSolution" mnemonicParsing="false" onAction="#OnSimpleSolutionSelected"
+                                 text="SimpleSolution" selected="true">
                         <toggleGroup>
                             <ToggleGroup fx:id="Algorithm"/>
                         </toggleGroup>
                     </RadioButton>
+                    <RadioButton fx:id="CountedCompleter" mnemonicParsing="false" onAction="#OnCountedCompleterSelected"
+                                 text="CountedCompleter" toggleGroup="$Algorithm"/>
                     <RadioButton fx:id="ForkJoinTask" mnemonicParsing="false" onAction="#OnForkJoinTaskSelected"
                                  text="ForkJoinTask" toggleGroup="$Algorithm"/>
                 </HBox>

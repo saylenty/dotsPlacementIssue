@@ -3,6 +3,7 @@ package com.gitlab.saylenty.visual.controllers;
 import com.gitlab.saylenty.generator.PointPositionGenerator;
 import com.gitlab.saylenty.infrastructure.Point;
 import com.gitlab.saylenty.strategy.PointsFinderStrategy;
+import com.gitlab.saylenty.strategy.SimplePointsFinder;
 import com.gitlab.saylenty.strategy.concurrent.task.PositionFinderCountedCompleter;
 import com.gitlab.saylenty.strategy.concurrent.task.PositionFinderTask;
 import com.gitlab.saylenty.visual.elements.LabeledChartNode;
@@ -13,10 +14,15 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.ToggleGroup;
 
 import java.util.List;
 
 public class UIMainController {
+
+    private List<List<Point>> result;
+    private int currentSolution;
+    private PointsFinderStrategy currentStrategy;
 
     // TODO read matrix from outside
     private final int[][] matrix = new int[][]{
@@ -32,14 +38,16 @@ public class UIMainController {
             {2, 2, 5, 6, 5, 5, 4, 3, 2, 0}
     };
 
+    @FXML
+    public ToggleGroup Algorithm;
+    @FXML
     public RadioButton CountedCompleter;
+    @FXML
     public RadioButton ForkJoinTask;
+    @FXML
+    public RadioButton SimpleSolution;
+    @FXML
     public TextArea InfoLog;
-
-    private List<List<Point>> result;
-    private int currentSolution;
-    private PointsFinderStrategy currentStrategy;
-
     @FXML
     public ScatterChart<Number, Number> ScatterChart;
     @FXML
@@ -58,7 +66,6 @@ public class UIMainController {
     @FXML
     public void OnGetNextSolution() {
         if (result == null) {
-            // TODO add ability to choose strategy from UI
             // run task and wait until complete
             long startTime = System.currentTimeMillis();
             result = currentStrategy.findSolution(matrix);
@@ -119,6 +126,13 @@ public class UIMainController {
     public void OnForkJoinTaskSelected() {
         InfoLog.appendText("Use ForkJoinTask algorithm\n");
         currentStrategy = new PositionFinderTask(matrix, new PointPositionGenerator());
+        resetResults();
+    }
+
+    @FXML
+    public void OnSimpleSolutionSelected() {
+        InfoLog.appendText("Use SimpleSolution algorithm\n");
+        currentStrategy = new SimplePointsFinder(new PointPositionGenerator());
         resetResults();
     }
 
