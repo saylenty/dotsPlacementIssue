@@ -14,7 +14,7 @@ Available solvers
     <li>Java Cuncurrent Aproach
         <ul>
             <li>Based on ForkJoin task - use concurrent technique for solving the task</li>
-            <li>Based on CunterCompleted task - similar to ForkJoin but with minimal interprocess communication</li>
+            <li>Based on CountedCompleter task - similar to ForkJoin but with minimal interprocess communication</li>
         </ul>
     </li>
 </ol>
