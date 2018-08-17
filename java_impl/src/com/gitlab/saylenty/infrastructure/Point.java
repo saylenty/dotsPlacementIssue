@@ -1,8 +1,8 @@
 package com.gitlab.saylenty.infrastructure;
 
 public final class Point {
-    private int x = 0;
-    private int y = 0;
+    private int x;
+    private int y;
 
     public Point(int x, int y) {
         this.x = x;
@@ -18,12 +18,15 @@ public final class Point {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Point){
-            Point d = (Point)obj;
-            return this.x == d.x && this.y == d.y;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-        return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Point point = (Point) o;
+        return x == point.x && y == point.y;
     }
 
     @Override
