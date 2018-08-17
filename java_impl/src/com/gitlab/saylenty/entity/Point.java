@@ -1,4 +1,4 @@
-package com.gitlab.saylenty.infrastructure;
+package com.gitlab.saylenty.entity;
 
 public final class Point {
     private int x;

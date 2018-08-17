@@ -1,7 +1,7 @@
 package com.gitlab.saylenty.strategy.concurrent.task;
 
 import com.gitlab.saylenty.generator.ICoordinatesGenerator;
-import com.gitlab.saylenty.infrastructure.Point;
+import com.gitlab.saylenty.entity.Point;
 import com.gitlab.saylenty.strategy.PointsFinderStrategy;
 import com.sun.istack.internal.NotNull;
 

@@ -1,7 +1,7 @@
 package com.gitlab.saylenty.strategy;
 
 import com.gitlab.saylenty.generator.PointPositionGenerator;
-import com.gitlab.saylenty.infrastructure.Point;
+import com.gitlab.saylenty.entity.Point;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -1,7 +1,7 @@
 package com.gitlab.saylenty.visual.controllers;
 
 import com.gitlab.saylenty.generator.PointPositionGenerator;
-import com.gitlab.saylenty.infrastructure.Point;
+import com.gitlab.saylenty.entity.Point;
 import com.gitlab.saylenty.strategy.PointsFinderStrategy;
 import com.gitlab.saylenty.strategy.SimplePointsFinder;
 import com.gitlab.saylenty.strategy.concurrent.task.PositionFinderCountedCompleter;

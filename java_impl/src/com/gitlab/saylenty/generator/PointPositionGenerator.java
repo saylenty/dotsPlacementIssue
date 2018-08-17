@@ -1,6 +1,6 @@
 package com.gitlab.saylenty.generator;
 
-import com.gitlab.saylenty.infrastructure.Point;
+import com.gitlab.saylenty.entity.Point;
 
 import java.util.HashSet;
 import java.util.Iterator;
