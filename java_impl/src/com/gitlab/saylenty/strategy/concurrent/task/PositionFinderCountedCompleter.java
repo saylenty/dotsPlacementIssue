@@ -12,8 +12,6 @@ import java.util.concurrent.CountedCompleter;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
-import static java.lang.Math.abs;
-
 public class PositionFinderCountedCompleter extends CountedCompleter<List<List<Point>>> implements PointsFinderStrategy {
 
     private int[][] matrix;
@@ -46,14 +44,22 @@ public class PositionFinderCountedCompleter extends CountedCompleter<List<List<P
     public void compute() {
         if (pointNumber >= matrix.length) return;
         int distance = matrix[0][pointNumber]; // distance to 0 dot
+        int[] pnMatrix = this.matrix[pointNumber]; // distances to check for current point and others
         Iterator<Point> iterator = generator.generate(distance);
         while (iterator.hasNext()) {
             // get next possible dot
             Point p = iterator.next();
+            int candidateX = p.getX();
+            int candidateY = p.getY();
             // if all distances are correct between current dot and all previous
             if (IntStream.range(0, pointNumber).
-                    allMatch(i -> abs(p.getX() - localResult.get(i).getX()) + abs(p.getY() - localResult.get(i).getY())
-                            == matrix[pointNumber][i])) {
+                    allMatch(i -> {
+                        Point accepted = localResult.get(i);
+                        int acceptedX = accepted.getX();
+                        int acceptedY = accepted.getY();
+                        return PointsFinderStrategy.absDistance(candidateX, candidateY, acceptedX, acceptedY)
+                                == pnMatrix[i];
+                    })) {
                 // create a copy of current solution list for new threads
                 List<Point> localResultCopy = new ArrayList<>(localResult);
                 // add current found position to that list

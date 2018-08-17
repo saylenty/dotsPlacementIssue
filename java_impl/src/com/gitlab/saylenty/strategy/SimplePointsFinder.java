@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static java.lang.Math.abs;
-
 public class SimplePointsFinder implements PointsFinderStrategy {
 
     private int[][] matrix;
@@ -30,14 +28,22 @@ public class SimplePointsFinder implements PointsFinderStrategy {
 
     private void findRecursively(int pointNumber, List<Point> localResult){
         int distance = matrix[0][pointNumber]; // distance to 0 dot
+        int[] pnMatrix = this.matrix[pointNumber]; // distances to check for current point and others
         Iterator<Point> iterator = generator.generate(distance);
         while (iterator.hasNext()) {
             // get next possible dot
             Point p = iterator.next();
+            int candidateX = p.getX();
+            int candidateY = p.getY();
             // if all distances are correct between current dot and all previous
             if (IntStream.range(0, pointNumber).
-                    allMatch(i -> abs(p.getX() - localResult.get(i).getX()) + abs(p.getY() - localResult.get(i).getY())
-                            == matrix[pointNumber][i])) {
+                    allMatch(i -> {
+                        Point accepted = localResult.get(i);
+                        int acceptedX = accepted.getX();
+                        int acceptedY = accepted.getY();
+                        return PointsFinderStrategy.absDistance(candidateX, candidateY, acceptedX, acceptedY)
+                                == pnMatrix[i];
+                    })) {
                 // add current found position to that list
                 localResult.add(p);
                 // if it's the last point
