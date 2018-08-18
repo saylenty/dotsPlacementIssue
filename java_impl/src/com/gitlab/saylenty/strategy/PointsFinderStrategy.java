@@ -11,13 +11,15 @@ public interface PointsFinderStrategy {
 
     /**
      * Calculates the solutions for the problem
+     *
      * @param matrix contains all required distances between all points
      * @return all found solutions
      */
-    List<List<Point>> findSolution(@NotNull int[][] matrix);
+    List<Point[]> findSolution(@NotNull int[][] matrix);
 
     /**
      * Calculates absolute distance between two points
+     *
      * @param x1 x coordinate of the first point
      * @param y1 y coordinate of the first point
      * @param x2 x coordinate of the second point

@@ -5,34 +5,28 @@ import com.gitlab.saylenty.entity.Point;
 import com.gitlab.saylenty.strategy.PointsFinderStrategy;
 import com.sun.istack.internal.NotNull;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
 import java.util.stream.IntStream;
 
-public class PositionFinderTask extends RecursiveTask<List<List<Point>>> implements PointsFinderStrategy {
+public class PositionFinderTask extends RecursiveTask<List<Point[]>> implements PointsFinderStrategy {
 
-    private int[][] matrix;
+    private static int[][] matrix;
     private final ICoordinatesGenerator generator;
     private final int pointNumber;
-    private final List<Point> localResult;
-    private final List<List<Point>> result;
+    private Point[] localResult;
+    private final List<Point[]> result;
 
-    public PositionFinderTask(@NotNull int[][] matrix, @NotNull ICoordinatesGenerator generator) {
-        this.matrix = matrix;
+    public PositionFinderTask(@NotNull ICoordinatesGenerator generator) {
         this.generator = generator;
         this.pointNumber = 0;
-        this.localResult = new ArrayList<>();
-        this.result = new ArrayList<>();
+        this.result = new LinkedList<>();
     }
 
-    private PositionFinderTask(int[][] matrix, int pointNumber, ICoordinatesGenerator generator,
-                               List<Point> localResult, List<List<Point>> result) {
-        this.matrix = matrix;
+    private PositionFinderTask(int pointNumber, ICoordinatesGenerator generator,
+                               Point[] localResult, List<Point[]> result) {
         this.pointNumber = pointNumber;
         this.generator = generator;
         this.localResult = localResult;
@@ -40,11 +34,11 @@ public class PositionFinderTask extends RecursiveTask<List<List<Point>>> impleme
     }
 
     @Override
-    protected List<List<Point>> compute() {
+    protected List<Point[]> compute() {
         int distance = matrix[0][pointNumber]; // distance to 0 dot
-        int[] pnMatrix = this.matrix[pointNumber]; // distances to check for current point and others
+        int[] pnMatrix = matrix[pointNumber]; // distances to check for current point and others
         Iterator<Point> iterator = generator.generate(distance);
-        Stack<PositionFinderTask> subTasks = new Stack<>();
+        ArrayDeque<PositionFinderTask> subTasks = new ArrayDeque<>();
         while (iterator.hasNext()) {
             // get next possible dot
             Point p = iterator.next();
@@ -53,27 +47,27 @@ public class PositionFinderTask extends RecursiveTask<List<List<Point>>> impleme
             // if all distances are correct between current dot and all previous
             if (IntStream.range(0, pointNumber).
                     allMatch(i -> {
-                        Point accepted = localResult.get(i);
+                        Point accepted = localResult[i];
                         int acceptedX = accepted.getX();
                         int acceptedY = accepted.getY();
                         return PointsFinderStrategy.absDistance(candidateX, candidateY, acceptedX, acceptedY)
                                 == pnMatrix[i];
                     })) {
                 // create a copy of current solution list for new threads
-                List<Point> localResultCopy = new ArrayList<>(localResult);
+                Point[] localResultCopy = localResult.clone();
                 // add current found position to that list
-                localResultCopy.add(p);
+                localResultCopy[pointNumber] = p;
 
                 // if it's the last point
                 if (pointNumber == matrix.length - 1) {
                     // we found the solution, add it to the final solution list
-                    synchronized (result){
+                    synchronized (result) {
                         result.add(localResultCopy);
                     }
                     return result;
                 }
                 // run next dot calculation
-                PositionFinderTask positionFinderTask = new PositionFinderTask(matrix, pointNumber + 1,
+                PositionFinderTask positionFinderTask = new PositionFinderTask(pointNumber + 1,
                         generator, localResultCopy, result);
                 subTasks.push(positionFinderTask);
                 positionFinderTask.fork();
@@ -84,11 +78,12 @@ public class PositionFinderTask extends RecursiveTask<List<List<Point>>> impleme
     }
 
     @Override
-    public List<List<Point>> findSolution(@NotNull int[][] matrix) {
-        this.matrix = matrix;
+    public List<Point[]> findSolution(@NotNull int[][] matrix) {
+        PositionFinderTask.matrix = matrix;
+        this.localResult = new Point[matrix.length];
         // run task and wait until complete
         this.invoke();
-        List<List<Point>> result = null;
+        List<Point[]> result = null;
         try {
             result = this.get();
         } catch (InterruptedException | ExecutionException e) {

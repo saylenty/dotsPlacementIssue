@@ -20,7 +20,7 @@ import java.util.List;
 
 public class UIMainController {
 
-    private List<List<Point>> result;
+    private List<Point[]> result;
     private int currentSolution;
     private PointsFinderStrategy currentStrategy;
 
@@ -75,37 +75,33 @@ public class UIMainController {
         if (currentSolution < result.size()) {
             ScatterChart.getData().clear(); // clear the current chart
             // we need to find the chart min-max bounds
-            int minX = Integer.MAX_VALUE;
             int maxX = Integer.MIN_VALUE;
-            int minY = Integer.MAX_VALUE;
             int maxY = Integer.MIN_VALUE;
 
-            List<Point> points = result.get(currentSolution);
+            Point[] points = result.get(currentSolution);
             XYChart.Series<Number, Number> series = new XYChart.Series<>();
             series.setName(String.format("Points visual representation %d", currentSolution + 1));
-            int bound = points.size();
+            int bound = points.length;
             for (int i = 0; i < bound; i++) {
-                Point point = points.get(i);
-                if (point.getX() < minX) {
-                    minX = point.getX();
+                Point point = points[i];
+                int x = point.getX();
+                int absX = Math.abs(x);
+                if (absX > maxX){
+                    maxX = absX;
                 }
-                if (point.getX() > maxX) {
-                    maxX = point.getX();
+                int y = point.getY();
+                int absY = Math.abs(y);
+                if (absY > maxY){
+                    maxY = absY;
                 }
-                if (point.getY() < minY) {
-                    minY = point.getY();
-                }
-                if (point.getY() > maxY) {
-                    maxY = point.getY();
-                }
-                XYChart.Data<Number, Number> data = new XYChart.Data<>(point.getX(), point.getY());
+                XYChart.Data<Number, Number> data = new XYChart.Data<>(x, y);
                 data.setNode(new LabeledChartNode(i));
                 series.getData().add(data);
             }
             ScatterChart.getData().add(series);
             currentSolution++;
             // update new bounds for a chart
-            updateChartScales(minX, maxX, minY, maxY, 1, 1);
+            updateChartScales(-maxX, maxX, -maxY, maxY, 1, 1);
             // make the solutions be cyclic
             if (currentSolution == result.size()) {
                 currentSolution = 0;
@@ -118,14 +114,14 @@ public class UIMainController {
     @FXML
     public void OnCountedCompleterSelected() {
         InfoLog.appendText("Use CountedCompleter algorithm\n");
-        currentStrategy = new PositionFinderCountedCompleter(matrix, new PointPositionGenerator());
+        currentStrategy = new PositionFinderCountedCompleter(new PointPositionGenerator());
         resetResults();
     }
 
     @FXML
     public void OnForkJoinTaskSelected() {
         InfoLog.appendText("Use ForkJoinTask algorithm\n");
-        currentStrategy = new PositionFinderTask(matrix, new PointPositionGenerator());
+        currentStrategy = new PositionFinderTask(new PointPositionGenerator());
         resetResults();
     }
 
