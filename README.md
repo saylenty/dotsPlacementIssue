@@ -9,20 +9,18 @@ This is a recursive algorithm with backtracking approach.
 
 Available solvers
 ============================
-<ol type="1">
-    <li>Python implementation - finds the first possible solution</li>
-    <li>Java Cuncurrent Aproach
-        <ul>
-            <li>Based on ForkJoin task - use concurrent technique for solving the task</li>
-            <li>Based on CountedCompleter task - similar to ForkJoin but with minimal interprocess communication</li>
-        </ul>
-    </li>
-</ol>
+* Python implementation - finds the first possible solution
+* Java implementation
+  * Simple single-thread approach
+  * Rotation approach => optimized `Simple` one
+  * Concurrent
+    * Based on ForkJoin task - use concurrent technique for solving the task
+    * Based on CountedCompleter task - similar to `ForkJoin` but with minimal interprocess communication
 
 Available visualization
 ============================
 Java implementation has a JavaFX2 visualization:
-<br>![JavaFX2 visualization](https://i.imgur.com/oiLxlWD.gif)<br>
+<br>![JavaFX2 visualization](https://i.imgur.com/k9qvC9f.gif)<br>
 
 Example
 ============================
