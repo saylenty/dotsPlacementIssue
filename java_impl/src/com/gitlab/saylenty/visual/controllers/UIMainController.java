@@ -1,8 +1,9 @@
 package com.gitlab.saylenty.visual.controllers;
 
-import com.gitlab.saylenty.generator.PointPositionGenerator;
 import com.gitlab.saylenty.entity.Point;
+import com.gitlab.saylenty.generator.PointPositionGenerator;
 import com.gitlab.saylenty.strategy.PointsFinderStrategy;
+import com.gitlab.saylenty.strategy.RotationPointsFinder;
 import com.gitlab.saylenty.strategy.SimplePointsFinder;
 import com.gitlab.saylenty.strategy.concurrent.task.PositionFinderCountedCompleter;
 import com.gitlab.saylenty.strategy.concurrent.task.PositionFinderTask;
@@ -46,6 +47,8 @@ public class UIMainController {
     public RadioButton ForkJoinTask;
     @FXML
     public RadioButton SimpleSolution;
+    @FXML
+    public RadioButton RotationSolution;
     @FXML
     public TextArea InfoLog;
     @FXML
@@ -129,6 +132,13 @@ public class UIMainController {
     public void OnSimpleSolutionSelected() {
         InfoLog.appendText("Use SimpleSolution algorithm\n");
         currentStrategy = new SimplePointsFinder(new PointPositionGenerator());
+        resetResults();
+    }
+
+    @FXML
+    public void OnRotationSolutionSelected() {
+        InfoLog.appendText("Use RotationSolution algorithm\n");
+        currentStrategy = new RotationPointsFinder(new PointPositionGenerator());
         resetResults();
     }
 

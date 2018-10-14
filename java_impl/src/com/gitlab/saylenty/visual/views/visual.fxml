@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-
 <GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.141"
           xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gitlab.saylenty.visual.controllers.UIMainController">
     <columnConstraints>
@@ -38,6 +37,9 @@
                         <toggleGroup>
                             <ToggleGroup fx:id="Algorithm"/>
                         </toggleGroup>
+                    </RadioButton>
+                    <RadioButton fx:id="RotationSolution" mnemonicParsing="false" onAction="#OnRotationSolutionSelected"
+                                 text="RotationSolution" toggleGroup="$Algorithm">
                     </RadioButton>
                     <RadioButton fx:id="CountedCompleter" mnemonicParsing="false" onAction="#OnCountedCompleterSelected"
                                  text="CountedCompleter" toggleGroup="$Algorithm"/>

@@ -1,16 +1,18 @@
 package com.gitlab.saylenty.strategy;
 
-import com.gitlab.saylenty.generator.PointPositionGenerator;
 import com.gitlab.saylenty.entity.Point;
+import com.gitlab.saylenty.generator.PointPositionGenerator;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class SimplePointsFinder implements PointsFinderStrategy {
 
-    private int[][] matrix;
-    private final List<Point[]> result;
-    private final PointPositionGenerator generator;
+    protected int[][] matrix;
+    protected final List<Point[]> result;
+    protected final PointPositionGenerator generator;
 
     public SimplePointsFinder(PointPositionGenerator generator) {
         this.generator = generator;
@@ -24,7 +26,7 @@ public class SimplePointsFinder implements PointsFinderStrategy {
         return result;
     }
 
-    private void findRecursively(int pointNumber, Point[] localResult) {
+    protected void findRecursively(int pointNumber, Point[] localResult) {
         int distance = matrix[0][pointNumber]; // distance to 0 dot
         int[] pnMatrix = this.matrix[pointNumber]; // distances to check for current point and others
         Iterator<Point> iterator = generator.generate(distance);
