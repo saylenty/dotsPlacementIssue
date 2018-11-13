@@ -1,7 +1,6 @@
 package com.gitlab.saylenty.strategy;
 
 import com.gitlab.saylenty.entity.Point;
-import com.gitlab.saylenty.generator.PointPositionGenerator;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,8 +9,8 @@ import java.util.stream.Stream;
 
 public class RotationPointsFinder extends SimplePointsFinder {
 
-    public RotationPointsFinder(PointPositionGenerator generator) {
-        super(generator);
+    public RotationPointsFinder() {
+        super();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.gitlab.saylenty.visual.controllers;
 
 import com.gitlab.saylenty.entity.Point;
-import com.gitlab.saylenty.generator.PointPositionGenerator;
 import com.gitlab.saylenty.strategy.PointsFinderStrategy;
 import com.gitlab.saylenty.strategy.RotationPointsFinder;
 import com.gitlab.saylenty.strategy.SimplePointsFinder;
@@ -117,28 +116,28 @@ public class UIMainController {
     @FXML
     public void OnCountedCompleterSelected() {
         InfoLog.appendText("Use CountedCompleter algorithm\n");
-        currentStrategy = new PositionFinderCountedCompleter(new PointPositionGenerator());
+        currentStrategy = new PositionFinderCountedCompleter();
         resetResults();
     }
 
     @FXML
     public void OnForkJoinTaskSelected() {
         InfoLog.appendText("Use ForkJoinTask algorithm\n");
-        currentStrategy = new PositionFinderTask(new PointPositionGenerator());
+        currentStrategy = new PositionFinderTask();
         resetResults();
     }
 
     @FXML
     public void OnSimpleSolutionSelected() {
         InfoLog.appendText("Use SimpleSolution algorithm\n");
-        currentStrategy = new SimplePointsFinder(new PointPositionGenerator());
+        currentStrategy = new SimplePointsFinder();
         resetResults();
     }
 
     @FXML
     public void OnRotationSolutionSelected() {
         InfoLog.appendText("Use RotationSolution algorithm\n");
-        currentStrategy = new RotationPointsFinder(new PointPositionGenerator());
+        currentStrategy = new RotationPointsFinder();
         resetResults();
     }
 

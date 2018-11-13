@@ -1,11 +1,13 @@
 package com.gitlab.saylenty.strategy.concurrent.task;
 
-import com.gitlab.saylenty.generator.ICoordinatesGenerator;
 import com.gitlab.saylenty.entity.Point;
+import com.gitlab.saylenty.generator.PointPositionGenerator;
 import com.gitlab.saylenty.strategy.PointsFinderStrategy;
 import com.sun.istack.internal.NotNull;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CountedCompleter;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
@@ -13,23 +15,19 @@ import java.util.stream.IntStream;
 public class PositionFinderCountedCompleter extends CountedCompleter<List<Point[]>> implements PointsFinderStrategy {
 
     private static int[][] matrix;
-    private final ICoordinatesGenerator generator;
     private final int pointNumber;
     private Point[] localResult;
     private final AtomicReference<List<Point[]>> result;
 
-    public PositionFinderCountedCompleter(@NotNull ICoordinatesGenerator generator) {
-        this.generator = generator;
+    public PositionFinderCountedCompleter() {
         this.pointNumber = 0;
         this.result = new AtomicReference<>(new LinkedList<>());
     }
 
     private PositionFinderCountedCompleter(PositionFinderCountedCompleter p, int pointNumber,
-                                           ICoordinatesGenerator generator,
                                            Point[] localResult, AtomicReference<List<Point[]>> result) {
         super(p);
         this.pointNumber = pointNumber;
-        this.generator = generator;
         this.localResult = localResult;
         this.result = result;
     }
@@ -42,7 +40,7 @@ public class PositionFinderCountedCompleter extends CountedCompleter<List<Point[
         }
         int distance = matrix[0][pointNumber]; // distance to 0 dot
         int[] pnMatrix = matrix[pointNumber]; // distances to check for current point and others
-        Iterator<Point> iterator = generator.generate(distance);
+        Iterator<Point> iterator = new PointPositionGenerator(distance);
         while (iterator.hasNext()) {
             // get next possible dot
             Point p = iterator.next();
@@ -76,7 +74,7 @@ public class PositionFinderCountedCompleter extends CountedCompleter<List<Point[
                 addToPendingCount(1);
                 // run next dot calculation
                 PositionFinderCountedCompleter positionFinderTask = new PositionFinderCountedCompleter(this,
-                        pointNumber + 1, generator, localResultCopy, result);
+                        pointNumber + 1, localResultCopy, result);
                 positionFinderTask.fork();
             }
         }

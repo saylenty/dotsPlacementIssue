@@ -2,25 +2,47 @@ package com.gitlab.saylenty.generator;
 
 import com.gitlab.saylenty.entity.Point;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class PointPositionGenerator implements ICoordinatesGenerator {
+public class PointPositionGenerator implements Iterator<Point> {
+
+    private final int distance;
+    private int n;
+    private Iterator<Point> iterator = Collections.emptyIterator();
+
+    public PointPositionGenerator(int distance) {
+        this.distance = distance;
+    }
 
     /**
-     * Create a bunch of coordinates that satisfy the following rule
-     * @implNote The distance is not the weight of the line which directly connects two dots => lines are angular
-     * like a line that connects two dots following only the edges of a squares in the copy-book
+     * @return true if has more available coordinates, otherwise false
      */
     @Override
-    public Iterator<Point> generate(int distance){
-        HashSet<Point> buffer = new HashSet<>(4 * distance, 1.0f);
-        for (int j = 0; j <= distance; j++) {
-            buffer.add(new Point(j, distance - j));
-            buffer.add(new Point(-j, distance - j));
-            buffer.add(new Point(j, -(distance - j)));
-            buffer.add(new Point(-j, -(distance - j)));
+    public boolean hasNext() {
+        return n <= distance || iterator.hasNext();
+    }
+
+    /**
+     * @return next possible coordinate combination based on {@code distance} value
+     */
+    @Override
+    public Point next() {
+        if (iterator.hasNext()) {
+            return iterator.next();
         }
-        return buffer.iterator();
+        if (n > distance) {
+            throw new NoSuchElementException("no more elements available");
+        }
+        HashSet<Point> buffer = new HashSet<>(4, 1.0f);
+        buffer.add(new Point(n, distance - n));
+        buffer.add(new Point(-n, distance - n));
+        buffer.add(new Point(n, -(distance - n)));
+        buffer.add(new Point(-n, -(distance - n)));
+        iterator = buffer.iterator();
+        ++n;
+        return iterator.next();
     }
 }

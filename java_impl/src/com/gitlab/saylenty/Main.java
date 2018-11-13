@@ -1,7 +1,6 @@
 package com.gitlab.saylenty;
 
 import com.gitlab.saylenty.entity.Point;
-import com.gitlab.saylenty.generator.PointPositionGenerator;
 import com.gitlab.saylenty.strategy.PointsFinderStrategy;
 import com.gitlab.saylenty.strategy.concurrent.task.PositionFinderTask;
 
@@ -24,7 +23,7 @@ public class Main {
                 {2, 2, 5, 6, 5, 5, 4, 3, 2, 0}
         };
         // create task
-        PointsFinderStrategy positionFinderTask = new PositionFinderTask(new PointPositionGenerator());
+        PointsFinderStrategy positionFinderTask = new PositionFinderTask();
         // run task and wait until complete
         List<Point[]> result = positionFinderTask.findSolution(matrix);
         // print calculation result

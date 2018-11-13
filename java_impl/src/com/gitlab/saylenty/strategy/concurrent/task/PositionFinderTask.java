@@ -1,11 +1,14 @@
 package com.gitlab.saylenty.strategy.concurrent.task;
 
-import com.gitlab.saylenty.generator.ICoordinatesGenerator;
 import com.gitlab.saylenty.entity.Point;
+import com.gitlab.saylenty.generator.PointPositionGenerator;
 import com.gitlab.saylenty.strategy.PointsFinderStrategy;
 import com.sun.istack.internal.NotNull;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
@@ -14,21 +17,17 @@ import java.util.stream.IntStream;
 public class PositionFinderTask extends RecursiveTask<List<Point[]>> implements PointsFinderStrategy {
 
     private static int[][] matrix;
-    private final ICoordinatesGenerator generator;
     private final int pointNumber;
     private Point[] localResult;
     private final List<Point[]> result;
 
-    public PositionFinderTask(@NotNull ICoordinatesGenerator generator) {
-        this.generator = generator;
+    public PositionFinderTask() {
         this.pointNumber = 0;
         this.result = new LinkedList<>();
     }
 
-    private PositionFinderTask(int pointNumber, ICoordinatesGenerator generator,
-                               Point[] localResult, List<Point[]> result) {
+    private PositionFinderTask(int pointNumber, Point[] localResult, List<Point[]> result) {
         this.pointNumber = pointNumber;
-        this.generator = generator;
         this.localResult = localResult;
         this.result = result;
     }
@@ -37,7 +36,7 @@ public class PositionFinderTask extends RecursiveTask<List<Point[]>> implements 
     protected List<Point[]> compute() {
         int distance = matrix[0][pointNumber]; // distance to 0 dot
         int[] pnMatrix = matrix[pointNumber]; // distances to check for current point and others
-        Iterator<Point> iterator = generator.generate(distance);
+        Iterator<Point> iterator = new PointPositionGenerator(distance);
         ArrayDeque<PositionFinderTask> subTasks = new ArrayDeque<>();
         while (iterator.hasNext()) {
             // get next possible dot
@@ -67,8 +66,8 @@ public class PositionFinderTask extends RecursiveTask<List<Point[]>> implements 
                     return result;
                 }
                 // run next dot calculation
-                PositionFinderTask positionFinderTask = new PositionFinderTask(pointNumber + 1,
-                        generator, localResultCopy, result);
+                PositionFinderTask positionFinderTask = new PositionFinderTask(pointNumber + 1, localResultCopy,
+                        result);
                 subTasks.push(positionFinderTask);
                 positionFinderTask.fork();
             }
