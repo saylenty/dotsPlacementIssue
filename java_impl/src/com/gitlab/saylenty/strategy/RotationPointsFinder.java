@@ -9,10 +9,6 @@ import java.util.stream.Stream;
 
 public class RotationPointsFinder extends SimplePointsFinder {
 
-    public RotationPointsFinder() {
-        super();
-    }
-
     @Override
     public List<Point[]> findSolution(int[][] matrix) {
         this.matrix = matrix;
@@ -30,14 +26,15 @@ public class RotationPointsFinder extends SimplePointsFinder {
 
         // rotate the answer over III other sectors of Cartesian coordinate plane
         for (int i = 0, size = result.size(); i < size; i++) {
-            Point[] points1 = result.get(i);
-            int length = points1.length;
-            Point[][] rotated = new Point[3][length];
-            for (int j = 0; j < length; j++) {
-                Point point1 = points1[j];
-                rotated[0][j] = new Point(-point1.getX(), point1.getY());
-                rotated[1][j] = new Point(point1.getX(), -point1.getY());
-                rotated[2][j] = new Point(-point1.getX(), -point1.getY());
+            Point[] points = result.get(i);
+            Point[][] rotated = new Point[3][points.length];
+            int j = 0;
+            for (Point point : points) {
+                int x = point.getX();
+                int y = point.getY();
+                rotated[0][j] = new Point(-x, y);
+                rotated[1][j] = new Point(x, -y);
+                rotated[2][j++] = new Point(-x, -y);
             }
             Collections.addAll(result, rotated);
         }
