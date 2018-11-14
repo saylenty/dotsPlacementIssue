@@ -27,7 +27,7 @@ public class SimplePointsFinder implements PointsFinderStrategy {
     protected void findRecursively(int pointNumber, Point[] localResult) {
         int distance = matrix[0][pointNumber]; // distance to 0 dot
         int[] pnMatrix = this.matrix[pointNumber]; // distances to check for current point and others
-        Iterator<Point> iterator = new PointPositionGenerator(distance);
+        Iterator<Point> iterator = new PointPositionGenerator().generate(distance);
         while (iterator.hasNext()) {
             // get next possible dot
             Point p = iterator.next();

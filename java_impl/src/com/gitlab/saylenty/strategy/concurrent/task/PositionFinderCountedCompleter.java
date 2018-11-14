@@ -40,7 +40,7 @@ public class PositionFinderCountedCompleter extends CountedCompleter<List<Point[
         }
         int distance = matrix[0][pointNumber]; // distance to 0 dot
         int[] pnMatrix = matrix[pointNumber]; // distances to check for current point and others
-        Iterator<Point> iterator = new PointPositionGenerator(distance);
+        Iterator<Point> iterator = new PointPositionGenerator().generate(distance);
         while (iterator.hasNext()) {
             // get next possible dot
             Point p = iterator.next();

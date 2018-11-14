@@ -7,42 +7,48 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class PointPositionGenerator implements Iterator<Point> {
+public class PointPositionGenerator implements ICoordinatesGenerator {
 
-    private final int distance;
-    private int n;
-    private Iterator<Point> iterator = Collections.emptyIterator();
+    private int distance;
 
-    public PointPositionGenerator(int distance) {
+    @Override
+    public Iterator<Point> generate(int distance) {
         this.distance = distance;
+        return new PointPositionIterator();
     }
 
-    /**
-     * @return true if has more available coordinates, otherwise false
-     */
-    @Override
-    public boolean hasNext() {
-        return n <= distance || iterator.hasNext();
-    }
+    private final class PointPositionIterator implements Iterator<Point> {
 
-    /**
-     * @return next possible coordinate combination based on {@code distance} value
-     */
-    @Override
-    public Point next() {
-        if (iterator.hasNext()) {
+        private int n;
+        private Iterator<Point> iterator = Collections.emptyIterator();
+
+        /**
+         * @return true if has more available coordinates, otherwise false
+         */
+        @Override
+        public boolean hasNext() {
+            return n <= distance || iterator.hasNext();
+        }
+
+        /**
+         * @return next possible coordinate combination based on {@code distance} value
+         */
+        @Override
+        public Point next() {
+            if (iterator.hasNext()) {
+                return iterator.next();
+            }
+            if (n > distance) {
+                throw new NoSuchElementException("no more elements available");
+            }
+            HashSet<Point> buffer = new HashSet<>(4, 1.0f);
+            buffer.add(new Point(n, distance - n));
+            buffer.add(new Point(-n, distance - n));
+            buffer.add(new Point(n, -(distance - n)));
+            buffer.add(new Point(-n, -(distance - n)));
+            iterator = buffer.iterator();
+            ++n;
             return iterator.next();
         }
-        if (n > distance) {
-            throw new NoSuchElementException("no more elements available");
-        }
-        HashSet<Point> buffer = new HashSet<>(4, 1.0f);
-        buffer.add(new Point(n, distance - n));
-        buffer.add(new Point(-n, distance - n));
-        buffer.add(new Point(n, -(distance - n)));
-        buffer.add(new Point(-n, -(distance - n)));
-        iterator = buffer.iterator();
-        ++n;
-        return iterator.next();
     }
 }

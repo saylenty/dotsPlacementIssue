@@ -36,7 +36,7 @@ public class PositionFinderTask extends RecursiveTask<List<Point[]>> implements 
     protected List<Point[]> compute() {
         int distance = matrix[0][pointNumber]; // distance to 0 dot
         int[] pnMatrix = matrix[pointNumber]; // distances to check for current point and others
-        Iterator<Point> iterator = new PointPositionGenerator(distance);
+        Iterator<Point> iterator = new PointPositionGenerator().generate(distance);
         ArrayDeque<PositionFinderTask> subTasks = new ArrayDeque<>();
         while (iterator.hasNext()) {
             // get next possible dot
