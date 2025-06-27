@@ -1,8 +1,11 @@
-dotsPlacementIssue
+2D Point Triangulation
 ============================
-Algorithm solves the problem of the points placement according to the length which is specified in the matrix.
+This project is dedicated to positioning (triangulating) points in a two-dimensional
+Cartesian system, where the origin is always fixed at `(0, 0)`. The algorithms
+reconstruct coordinates using a matrix of pairwise Manhattan distances between
+points.
 
-Implantation details
+Implementation details
 ============================
 The main idea of this algorithm is to try every possible combination of calculated coordinates until the correct answer(s) is found.
 This is a recursive algorithm with backtracking approach.
@@ -65,7 +68,7 @@ According to the matrix we can say the distance between two dots.<br> Thus, the 
 <ul>
     <li> From point [0] to point [0] = 0 (distance to itself is zero -> obvious)</li>
     <li> From point [0] to point [1] = 2 </li>
-    <li> Frm point [0] to point [2] = 2 
+    <li> From point [0] to point [2] = 2 
     <br>...
     <li> 0->9 = 8 </li>
     <li> 1->0 = 2 </li>
@@ -80,3 +83,22 @@ If we visualise the result using Cartesian coordinate system we will get the pic
 <br> ![result](./ex.jpg) <br>
 <br> _Note_: Blue color was used to indicate rules of calculating the distance.
 <br> __Pay attention__: The distance is not weight of the line which _directly_ connects two dots (lines may be angular).
+
+Running tests
+============================
+The Python implementation includes a small unit test suite. Execute the following command from the project root:
+
+```
+PYTHONPATH=python_impl python3 -m unittest
+```
+
+The Java implementation uses JUnit 5. Compile the sources and run the tests using the console launcher:
+
+```
+javac -d java_impl/build/classes \
+    $(find java_impl/src -path '*visual*' -prune -o -name '*.java' -print)
+javac -d java_impl/build/test-classes -cp java_impl/build/classes:/usr/share/java/junit-platform-console-standalone.jar \
+    $(find java_impl/tests -name '*.java')
+java -jar /usr/share/java/junit-platform-console-standalone.jar \
+    -cp java_impl/build/classes:java_impl/build/test-classes --scan-class-path
+```
