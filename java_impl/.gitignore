@@ -1,0 +1,46 @@
+# Compiled Class Files
+*.class
+
+# Build Artifacts
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# Build Directories
+/build/
+/target/
+/out/
+
+# Gradle Files
+.gradle/
+**/build/
+
+# Maven Wrapper
+.mvn/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA Project Files
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+
+# IntelliJ Run Configurations (Optional)
+run/
+
+# Logs
+*.log
+
+# OS Specific Files
+.DS_Store
+Thumbs.db
+
+# VSCode (Optional)
+.vscode/
+
+# Environment Files
+*.env
+*.local
